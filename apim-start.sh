@@ -19,7 +19,7 @@
 
 heap_size=$1
 if [[ -z $heap_size ]]; then
-    heap_size="2500"
+    heap_size="4"
 fi
 
 export JAVA_HOME="/usr/lib/jvm/jdk-11/"
@@ -51,7 +51,7 @@ if [ ${#log_files[@]} -gt 1 ]; then
 fi
 
 echo "Setting Heap to ${heap_size}GB"
-export JVM_MEM_OPTS="-Xms2G -Xmx${heap_size}M"
+export JVM_MEM_OPTS="-Xms2G -Xmx${heap_size}G"
 
 echo "Enabling GC Logs"
 #-XX:+PrintGCDateStamps
