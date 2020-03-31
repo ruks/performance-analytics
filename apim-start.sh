@@ -22,7 +22,7 @@ if [[ -z $heap_size ]]; then
     heap_size="2500"
 fi
 
-export JAVA_HOME="/opt/jdk-11"
+export JAVA_HOME="/usr/lib/jvm/jdk-11/"
 
 apim_version=3.1.0
 carbon_bootstrap_class=org.wso2.carbon.bootstrap.Bootstrap
