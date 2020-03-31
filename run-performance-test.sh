@@ -3,43 +3,45 @@
 echo "users $1"
 echo "duration $2"
 echo "tps $3"
-echo "tps $4"
+echo "skipping $4"
 
-be_node=km.apim.com
-jmeter1=tm.apim.com
-jmeter2=gw.apim.com
-apim1=dev.apim.com
-apim2=worker.apim.com
-analytics=analytics.apim.com
+netty=netty.apim.com
+jmeter1=server1.apim.com
+jmeter2=server2.apim.com
+apim1=apim1.apim.com
+apim2=apim2.apim.com
+analytics1=analytics1.apim.com
+analytics2=analytics2.apim.com
 
-write_server_metrics() {
-    server=$1
-    ssh_host=$2
-    pgrep_pattern=$3
-    report_location=/home/ubuntu
-    command_prefix=""
-    if [[ ! -z $ssh_host ]]; then
-        command_prefix="ssh $ssh_host"
-    fi
-    $command_prefix ss -s > ${report_location}/${server}_ss.txt
-    $command_prefix uptime > ${report_location}/${server}_uptime.txt
-    $command_prefix sar -q > ${report_location}/${server}_loadavg.txt
-    $command_prefix sar -A > ${report_location}/${server}_sar.txt
-    $command_prefix top -bn 1 > ${report_location}/${server}_top.txt
-    if [[ ! -z $pgrep_pattern ]]; then
-        $command_prefix ps u -p \`pgrep -f $pgrep_pattern\` > ${report_location}/${server}_ps.txt
-    fi
-}
+#write_server_metrics() {
+#    server=$1
+#    ssh_host=$2
+#    pgrep_pattern=$3
+#    report_location=/home/ubuntu
+#    command_prefix=""
+#    if [[ ! -z $ssh_host ]]; then
+#        command_prefix="ssh $ssh_host"
+#    fi
+#    $command_prefix ss -s > ${report_location}/${server}_ss.txt
+#    $command_prefix uptime > ${report_location}/${server}_uptime.txt
+#    $command_prefix sar -q > ${report_location}/${server}_loadavg.txt
+#    $command_prefix sar -A > ${report_location}/${server}_sar.txt
+#    $command_prefix top -bn 1 > ${report_location}/${server}_top.txt
+#    if [[ ! -z $pgrep_pattern ]]; then
+#        $command_prefix ps u -p \`pgrep -f $pgrep_pattern\` > ${report_location}/${server}_ps.txt
+#    fi
+#}
 
-ssh -i apim310.key $jmeter1 "./performance-common/distribution/scripts/jmeter/jmeter-server-start.sh -n tm.apim.com -i /home/ubuntu/"
-ssh -i apim310.key $jmeter2 "./performance-common/distribution/scripts/jmeter/jmeter-server-start.sh -n gw.apim.com -i /home/ubuntu/"
+ssh -i performance-analytics/ssh/apim310.key $jmeter1 "./performance-common/distribution/scripts/jmeter/jmeter-server-start.sh -n server1.apim.com -i /home/ubuntu/"
+ssh -i performance-analytics/ssh/apim310.key $jmeter2 "./performance-common/distribution/scripts/jmeter/jmeter-server-start.sh -n server2.apim.com -i /home/ubuntu/"
 
 if [ "$4" != "-s" ]; then
     echo "skip restarting servers"
-	ssh -i apim310.key $be_node "./netty-start.sh"
-    ssh -i apim310.key $analytics "./analytics-start.sh"
-    ssh -i apim310.key $apim1 "./apim-start.sh"
-    ssh -i apim310.key $apim2 "./apim-start.sh"
+	ssh -i performance-analytics/ssh/apim310.key $netty "./performance-common/distribution/scripts/netty-service/netty-start.sh"
+    ssh -i performance-analytics/ssh/apim310.key $analytics1 "/home/ubuntu/performance-analytics/analytics-start.sh"
+    ssh -i performance-analytics/ssh/apim310.key $analytics2 "/home/ubuntu/performance-analytics/analytics-start.sh"
+    ssh -i performance-analytics/ssh/apim310.key $apim1 "/home/ubuntu/performance-analytics/apim-start.sh"
+    ssh -i performance-analytics/ssh/apim310.key $apim2 "/home/ubuntu/performance-analytics/apim-start.sh"
 fi
 
 /home/ubuntu/apache-jmeter-5.2.1/bin/jmeter -n -t analytics.jmx -R tm.apim.com,gw.apim.com -X \
@@ -49,7 +51,7 @@ fi
 
 #write_server_metrics jmeter
 #write_server_metrics analytics1 $api_ssh_host carbon
-write_server_metrics analytics2 analytics.apim.com carbon
+#write_server_metrics analytics2 analytics.apim.com carbon
 
 #nohup ./run-performance-test.sh 150 1800 180000 > out 2>&1 &
 #nohup ./run-performance-test.sh 150 900 30000 -s> out 2>&1 &

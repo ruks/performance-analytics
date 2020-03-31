@@ -384,19 +384,19 @@ auth.configs:
     allScopes: apim_analytics:admin apim_analytics:product_manager apim_analytics:api_developer apim_analytics:app_developer apim_analytics:devops_engineer apim_analytics:analytics_viewer apim_analytics:everyone openid apim:api_view apim:subscribe
     adminUsername: admin
     adminPassword: admin
-    kmDcrUrl: https://dev.apim.com:9443/client-registration/v0.16/register
-    kmTokenUrlForRedirection: https://dev.apim.com:9443/oauth2
-    kmTokenUrl: https://dev.apim.com:9443/oauth2
+    kmDcrUrl: https://apim1.apim.com:9443/client-registration/v0.16/register
+    kmTokenUrlForRedirection: https://apim1.apim.com:9443/oauth2
+    kmTokenUrl: https://apim1.apim.com:9443/oauth2
     kmUsername: admin
     kmPassword: admin
     portalAppContext: analytics-dashboard
     businessRulesAppContext : business-rules
     cacheTimeout: 900
-    baseUrl: https://analytics.apim.com:9443
+    baseUrl: https://analytics1.apim.com:9443
     grantType: authorization_code
-    publisherUrl: https://dev.apim.com:9443
-    devPortalUrl: https://dev.apim.com:9443
-    externalLogoutUrl: https://dev.apim.com:9443/oidc/logout
+    publisherUrl: https://apim1.apim.com:9443
+    devPortalUrl: https://apim1.apim.com:9443
+    externalLogoutUrl: https://apim1.apim.com:9443/oidc/logout
 
 wso2.dashboard:
   roles:

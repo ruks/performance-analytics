@@ -65,7 +65,7 @@ echo "Waiting for API Manager Analytics to start"
 while true 
 do
     # Check Version service
-    response_code="$(curl -H "accept: application/json" -u admin:admin -sk -w "%{http_code}" -o /dev/null https://localhost:9445/siddhi-apps?isActive=true)"
+    response_code="$(curl -H "accept: application/json" -u admin:admin -sk -w "%{http_code}" -o /dev/null https://localhost:9444/siddhi-apps?isActive=true)"
     if [ $response_code -eq 200 ]; then
         echo "API Manager Analytics started"
         break

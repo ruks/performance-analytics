@@ -1,102 +1,26 @@
 #!/bin/bash
-# Copyright 2017 WSO2 Inc. (http://wso2.org)
+#scp -i ssh/apim310.key apim1/deployment.toml ubuntu@apim1.apim.com:/home/ubuntu/wso2am-3.1.0/repository/conf/
+#scp -i ssh/apim310.key apim2/deployment.toml ubuntu@apim2.apim.com:/home/ubuntu/wso2am-3.1.0/repository/conf/
 #
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
+#scp -i ssh/apim310.key analytics1/worker/deployment.yaml ubuntu@analytics1.apim.com:/home/ubuntu/wso2am-analytics-3.1.0/conf/worker
+#scp -i ssh/apim310.key analytics2/worker/deployment.yaml ubuntu@analytics2.apim.com:/home/ubuntu/wso2am-analytics-3.1.0/conf/worker
 #
-#     http://www.apache.org/licenses/LICENSE-2.0
+#scp -i ssh/apim310.key analytics1/dashboard/deployment.yaml ubuntu@analytics1.apim.com:/home/ubuntu/wso2am-analytics-3.1.0/conf/dashboard
+#scp -i ssh/apim310.key analytics2/dashboard/deployment.yaml ubuntu@analytics2.apim.com:/home/ubuntu/wso2am-analytics-3.1.0/conf/dashboard
 #
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+#scp -i ssh/apim310.key lib/mysql-connector-java-5.1.48.jar ubuntu@apim1.apim.com:/home/ubuntu/wso2am-3.1.0/repository/components/lib/
+#scp -i ssh/apim310.key lib/mysql-connector-java-5.1.48.jar ubuntu@apim2.apim.com:/home/ubuntu/wso2am-3.1.0/repository/components/lib/
 #
-# ----------------------------------------------------------------------------
-# Start Netty Service
-# ----------------------------------------------------------------------------
+#scp -i ssh/apim310.key lib/mysql_connector_java_5.1.48_1.0.0.jar ubuntu@analytics1.apim.com:/home/ubuntu/wso2am-analytics-3.1.0/lib
+#scp -i ssh/apim310.key lib/mysql_connector_java_5.1.48_1.0.0.jar ubuntu@analytics2.apim.com:/home/ubuntu/wso2am-analytics-3.1.0/lib
 
-script_dir=$(dirname "$0")
-# Change directory to make sure logs directory is created inside $script_dir
-cd $script_dir
-service_name=netty-http-echo-service
-default_heap_size="4g"
-heap_size="$default_heap_size"
-wait_listen=false
-performance_common_version=0.4.6-SNAPSHOT
 
-function usage() {
-    echo ""
-    echo "Usage: "
-    echo "$0 [-m <heap_size>] [-w] [-h] -- [netty_service_flags]"
-    echo ""
-    echo "-m: The heap memory size of Netty Service. Default: $default_heap_size"
-    echo "-w: Wait till the port starts to listen."
-    echo "-h: Display this help and exit."
-    echo ""
-}
+scp -i ssh/apim310.key jks/wso2carbon.jks ubuntu@apim1.apim.com:wso2am-3.1.0/repository/resources/security/
+scp -i ssh/apim310.key jks/wso2carbon.jks ubuntu@apim2.apim.com:wso2am-3.1.0/repository/resources/security/
+scp -i ssh/apim310.key jks/wso2carbon.jks ubuntu@analytics1.apim.com:wso2am-analytics-3.1.0/resources/security/
+scp -i ssh/apim310.key jks/wso2carbon.jks ubuntu@analytics2.apim.com:wso2am-analytics-3.1.0/resources/security/
 
-while getopts "m:wh" opts; do
-    case $opts in
-    m)
-        heap_size=${OPTARG}
-        ;;
-    w)
-        wait_listen=true
-        ;;
-    h)
-        usage
-        exit 0
-        ;;
-    \?)
-        usage
-        exit 1
-        ;;
-    esac
-done
-shift "$((OPTIND - 1))"
-
-netty_service_flags="$@"
-
-if [[ -z $heap_size ]]; then
-    echo "Please specify the heap size."
-    exit 1
-fi
-
-if pgrep -f "$service_name" >/dev/null; then
-    echo "Shutting down Netty"
-    pkill -f $service_name
-fi
-
-gc_log_file=./logs/nettygc.log
-
-if [[ -f $gc_log_file ]]; then
-    echo "GC Log exists. Moving $gc_log_file to /tmp"
-    mv $gc_log_file /tmp/
-fi
-
-mkdir -p logs
-#-XX:+PrintGCDateStamps
-echo "Starting Netty"
-nohup java -Xms2g -Xmx${heap_size} -XX:+PrintGC -XX:+PrintGCDetails -Xloggc:$gc_log_file \
-    -jar $service_name-${performance_common_version}.jar $netty_service_flags >netty.out 2>&1 &
-
-if [ "$wait_listen" = true ]; then
-    # Find the port:
-    port=$(echo "$netty_service_flags" | sed -nE "s/--port[[:blank:]]([[:digit:]]+)/\1/p")
-    if [[ -z $port ]]; then
-        # Default port
-        port=8688
-    fi
-    echo "Waiting till the port $port starts to listen."
-    n=0
-    until [ $n -ge 60 ]; do
-        nc -zv localhost $port && break
-        n=$(($n + 1))
-        sleep 1
-    done
-fi
-
-sleep 1
-tail -50 netty.out
+scp -i ssh/apim310.key jks/client-truststore.jks ubuntu@apim1.apim.com:wso2am-3.1.0/repository/resources/security/
+scp -i ssh/apim310.key jks/client-truststore.jks ubuntu@apim2.apim.com:wso2am-3.1.0/repository/resources/security/
+scp -i ssh/apim310.key jks/client-truststore.jks ubuntu@analytics1.apim.com:wso2am-analytics-3.1.0/resources/security/
+scp -i ssh/apim310.key jks/client-truststore.jks ubuntu@analytics2.apim.com:wso2am-analytics-3.1.0/resources/security/
