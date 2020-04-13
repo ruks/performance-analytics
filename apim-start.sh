@@ -19,7 +19,7 @@
 
 heap_size=$1
 if [[ -z $heap_size ]]; then
-    heap_size="4"
+    heap_size="3"
 fi
 
 export JAVA_HOME="/usr/lib/jvm/jdk-11/"
@@ -57,22 +57,7 @@ echo "Enabling GC Logs"
 #-XX:+PrintGCDateStamps
 export JAVA_OPTS="-XX:+PrintGC -XX:+PrintGCDetails -Xloggc:$HOME/wso2am-${apim_version}/repository/logs/gc.log"
 
-echo "Starting APIM - $HOME/wso2am-${apim_version}/bin/wso2server.sh start"
+echo "Starting APIM"
 $HOME/wso2am-${apim_version}/bin/wso2server.sh start
 
 echo "Waiting for API Manager to start"
-
-while true 
-do
-    # Check Version service
-    response_code="$(curl -sk -w "%{http_code}" -o /dev/null https://localhost:8243/services/Version)"
-    if [ $response_code -eq 200 ]; then
-        echo "API Manager started"
-        break
-    else
-        sleep 10
-    fi
-done
-
-# Wait for another 10 seconds to make sure that the server is ready to accept API requests
-sleep 10

@@ -47,7 +47,7 @@ done
 log_files=($HOME/wso2am-analytics-${apim_version}/wso2/worker/logs/*)
 if [ ${#log_files[@]} -gt 1 ]; then
     echo "Log files exists. Moving to /tmp"
-    mv $HOME/wso2am-analytics-${apim_version}/wso2/worker/logs/* /tmp/;
+    rm -R $HOME/wso2am-analytics-${apim_version}/wso2/worker/logs/*
 fi
 
 echo "Setting Heap to ${heap_size}GB"
@@ -57,7 +57,7 @@ echo "Enabling GC Logs"
 #-XX:+PrintGCDateStamps
 export JAVA_OPTS="-XX:+PrintGC -XX:+PrintGCDetails -Xloggc:$HOME/wso2am-analytics-${apim_version}/wso2/worker/logs/gc.log"
 
-echo "Starting APIM - $HOME/wso2am-analytics-${apim_version}/bin/wso2server.sh start"
+echo "Starting APIM Analytics"
 $HOME/wso2am-analytics-${apim_version}/bin/worker.sh start
 
 echo "Waiting for API Manager Analytics to start"
