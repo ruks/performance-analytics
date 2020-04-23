@@ -22,7 +22,7 @@ if [[ -z $heap_size ]]; then
     heap_size="4"
 fi
 
-export JAVA_HOME="/usr/lib/jvm/jdk-11/"
+export JAVA_HOME="/usr/lib/jvm/jdk1.8.0_161"
 
 apim_version=3.1.0
 carbon_bootstrap_class=org.wso2.carbon.launcher.Main
@@ -54,8 +54,7 @@ echo "Setting Heap to ${heap_size}GB"
 export JVM_MEM_OPTS="-Xms2G -Xmx${heap_size}G"
 
 echo "Enabling GC Logs"
-#-XX:+PrintGCDateStamps
-export JAVA_OPTS="-XX:+PrintGC -XX:+PrintGCDetails -Xloggc:$HOME/wso2am-analytics-${apim_version}/wso2/worker/logs/gc.log"
+export JAVA_OPTS="-XX:+PrintGC -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:$HOME/wso2am-analytics-${apim_version}/wso2/worker/logs/gc.log"
 
 echo "Starting APIM Analytics"
 $HOME/wso2am-analytics-${apim_version}/bin/worker.sh start
@@ -73,6 +72,3 @@ do
         sleep 10
     fi
 done
-
-# Wait for another 10 seconds to make sure that the server is ready to accept API requests.
-sleep 10

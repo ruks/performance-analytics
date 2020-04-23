@@ -18,6 +18,7 @@
 # ----------------------------------------------------------------------------
 
 heap_size=$1
+id=$2
 if [[ -z $heap_size ]]; then
     heap_size="3"
 fi
@@ -28,16 +29,16 @@ apim_version=3.1.0
 carbon_bootstrap_class=org.wso2.carbon.bootstrap.Bootstrap
 
 if pgrep -f "$carbon_bootstrap_class" > /dev/null; then
-    echo "Shutting down APIM"
+    echo "Shutting down APIM $id"
     $HOME/wso2am-${apim_version}/bin/wso2server.sh stop
 fi
 
-echo "Waiting for API Manager to stop"
+echo "Waiting for API Manager $id to stop"
 
 while true
 do
     if ! pgrep -f "$carbon_bootstrap_class" > /dev/null; then
-        echo "API Manager stopped"
+        echo "API Manager $id stopped"
         break
     else
         sleep 10
@@ -54,10 +55,9 @@ echo "Setting Heap to ${heap_size}GB"
 export JVM_MEM_OPTS="-Xms2G -Xmx${heap_size}G"
 
 echo "Enabling GC Logs"
-#-XX:+PrintGCDateStamps
-export JAVA_OPTS="-XX:+PrintGC -XX:+PrintGCDetails -Xloggc:$HOME/wso2am-${apim_version}/repository/logs/gc.log"
+export JAVA_OPTS="-XX:+PrintGC -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:$HOME/wso2am-${apim_version}/repository/logs/gc.log"
 
-echo "Starting APIM"
+echo "Starting APIM $id"
 $HOME/wso2am-${apim_version}/bin/wso2server.sh start
 
-echo "Waiting for API Manager to start"
+echo "######### Waiting for API Manager $id to start"

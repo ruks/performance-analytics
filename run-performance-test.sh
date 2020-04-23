@@ -5,6 +5,7 @@ echo "duration $2"
 echo "tps $3"
 echo "skipping $4"
 
+summaryFile="summary_"$2"m_"$3"tps.csv"
 netty=netty.apim.com
 jmeter1=server1.apim.com
 jmeter2=server2.apim.com
@@ -67,27 +68,17 @@ if [ "$4" != "-s" ]; then
     ssh -i performance-analytics/ssh/apim310.key $analytics2 "/home/ubuntu/performance-analytics/analytics-start.sh"
     echo "############### $analytics2 started"
 
-    ssh -i performance-analytics/ssh/apim310.key $apim1 "/home/ubuntu/performance-analytics/apim-start.sh"
-    echo "###############  $apim1 starting"
-    ssh -i performance-analytics/ssh/apim310.key $apim2 "/home/ubuntu/performance-analytics/apim-start.sh"
-    echo "###############  $apim2 starting"
-    ssh -i performance-analytics/ssh/apim310.key $apim3 "/home/ubuntu/performance-analytics/apim-start.sh"
-    echo "###############  $apim3 starting"
-    ssh -i performance-analytics/ssh/apim310.key $apim4 "/home/ubuntu/performance-analytics/apim-start.sh"
-    echo "###############  $apim4 starting"
-    ssh -i performance-analytics/ssh/apim310.key $apim5 "/home/ubuntu/performance-analytics/apim-start.sh"
-    echo "###############  $apim5 starting"
+    ssh -i performance-analytics/ssh/apim310.key $apim1 "/home/ubuntu/performance-analytics/apim-start.sh 4 $apim1"
+    ssh -i performance-analytics/ssh/apim310.key $apim2 "/home/ubuntu/performance-analytics/apim-start.sh 4 $apim2"
+    ssh -i performance-analytics/ssh/apim310.key $apim3 "/home/ubuntu/performance-analytics/apim-start.sh 3 $apim3"
+    ssh -i performance-analytics/ssh/apim310.key $apim4 "/home/ubuntu/performance-analytics/apim-start.sh 3 $apim4"
+    ssh -i performance-analytics/ssh/apim310.key $apim5 "/home/ubuntu/performance-analytics/apim-start.sh 3 $apim5"
 
-    ssh -i performance-analytics/ssh/apim310.key $apim1 "/home/ubuntu/performance-analytics/wait-apim-start.sh"
-    echo "###############  $apim1 started"
-    ssh -i performance-analytics/ssh/apim310.key $apim2 "/home/ubuntu/performance-analytics/wait-apim-start.sh"
-    echo "###############  $apim2 started"
-    ssh -i performance-analytics/ssh/apim310.key $apim3 "/home/ubuntu/performance-analytics/wait-apim-start.sh"
-    echo "###############  $apim3 started"
-    ssh -i performance-analytics/ssh/apim310.key $apim4 "/home/ubuntu/performance-analytics/wait-apim-start.sh"
-    echo "###############  $apim4 started"
-    ssh -i performance-analytics/ssh/apim310.key $apim5 "/home/ubuntu/performance-analytics/wait-apim-start.sh"
-    echo "###############  $apim5 started"
+    ssh -i performance-analytics/ssh/apim310.key $apim1 "/home/ubuntu/performance-analytics/wait-apim-start.sh $apim1"
+    ssh -i performance-analytics/ssh/apim310.key $apim2 "/home/ubuntu/performance-analytics/wait-apim-start.sh $apim2"
+    ssh -i performance-analytics/ssh/apim310.key $apim3 "/home/ubuntu/performance-analytics/wait-apim-start.sh $apim3"
+    ssh -i performance-analytics/ssh/apim310.key $apim4 "/home/ubuntu/performance-analytics/wait-apim-start.sh $apim4"
+    ssh -i performance-analytics/ssh/apim310.key $apim5 "/home/ubuntu/performance-analytics/wait-apim-start.sh $apim5"
 
     # Wait for another 10 seconds to make sure that the server is ready to accept API requests
     sleep 10
@@ -132,8 +123,12 @@ java -Xms1g -Xmx4g -jar performance-common/distribution/scripts/jtl-splitter/jtl
 echo "done jtl-splitter"
 /home/ubuntu/apache-jmeter-3.3/bin/jmeter -g metrix/results-warmup.jtl -o metrix/dashboard-warmup
 echo "done results-warmup"
-/home/ubuntu/apache-jmeter-3.3/bin/jmeter -g metrix/results-measurement.jtl -o metrix/dashboard-measurement
-echo "done results-measurement"
+#/home/ubuntu/apache-jmeter-3.3/bin/jmeter -g metrix/results-measurement.jtl -o metrix/dashboard-measurement
+#echo "done results-measurement"
+/home/ubuntu/apache-jmeter-3.3/bin/JMeterPluginsCMD.sh --generate-csv metrix/AggregateReport.csv --input-jtl metrix/results-measurement.jtl --plugin-type AggregateReport
+echo "done AggregateReport"
+
+./performance-analytics/create-summary-csv.sh $summaryFile
 
 echo "Performance test completed."
 #nohup ./run-performance-test.sh 150 1800 180000 > out 2>&1 &

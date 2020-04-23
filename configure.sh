@@ -29,7 +29,7 @@ scp -i ssh/apim310.key jks/client-truststore.jks ubuntu@analytics1.apim.com:wso2
 scp -i ssh/apim310.key jks/client-truststore.jks ubuntu@analytics2.apim.com:wso2am-analytics-3.1.0/resources/security/
 
 scp -i ssh/apim310.key run-performance-test.sh ubuntu@client.apim.com:performance-analytics/
-scp -i ssh/apim310.key create-summary-csv.sh ubuntu@client.apim.com:performance-analytics/
+scp -i ssh/apim310.key create-summary-csv.sh ubuntu@client1.apim.com:performance-analytics/
 
 
 scp -i ssh/apim310.key jks/wso2carbon.jks ubuntu@apim1.apim.com:wso2am-3.1.0/repository/resources/security/
@@ -47,6 +47,7 @@ scp -i ssh/apim310.key ubuntu@client.apim.com:performance-analytics/analytics.jm
 scp -i ssh/apim310.key analytics.jmx ubuntu@client.apim.com:performance-analytics
 
 scp -i ssh/apim310.key ubuntu@client.apim.com:summary.csv ./
+scp -i ssh/apim310.key ubuntu@client.apim.com:new.csv ./
 scp -i ssh/apim310.key ubuntu@client.apim.com:metrix/analytics1_gc.log ./
 scp -i ssh/apim310.key ubuntu@client.apim.com:metrix/apim1_gc.log ./
 scp -i ssh/apim310.key ubuntu@client.apim.com:performance-analytics/run-performance-test.sh ./diff
@@ -72,3 +73,45 @@ scp -i ssh/apim310.key apim-start.sh ubuntu@apim3.apim.com:performance-analytics
 scp -i ssh/apim310.key apim-start.sh ubuntu@apim4.apim.com:performance-analytics
 scp -i ssh/apim310.key apim-start.sh ubuntu@apim5.apim.com:performance-analytics
 
+scp -i ssh/apim310.key analytics-start.sh ubuntu@analytics1.apim.com:performance-analytics
+scp -i ssh/apim310.key analytics-start.sh ubuntu@analytics2.apim.com:performance-analytics
+
+######
+scp -i ssh/apim310.key active-active/analytics1/worker/deployment.yaml ubuntu@analytics1.apim.com:/home/ubuntu/wso2am-analytics-3.1.0/conf/worker
+scp -i ssh/apim310.key active-active/analytics2/worker/deployment.yaml ubuntu@analytics2.apim.com:/home/ubuntu/wso2am-analytics-3.1.0/conf/worker
+
+scp -i ssh/apim310.key active-active/apim1/deployment.toml ubuntu@apim1.apim.com:/home/ubuntu/wso2am-3.1.0/repository/conf/
+scp -i ssh/apim310.key active-active/apim2/deployment.toml ubuntu@apim2.apim.com:/home/ubuntu/wso2am-3.1.0/repository/conf/
+scp -i ssh/apim310.key active-active/apim2/deployment.toml ubuntu@apim3.apim.com:/home/ubuntu/wso2am-3.1.0/repository/conf/
+scp -i ssh/apim310.key active-active/apim2/deployment.toml ubuntu@apim4.apim.com:/home/ubuntu/wso2am-3.1.0/repository/conf/
+scp -i ssh/apim310.key active-active/apim2/deployment.toml ubuntu@apim5.apim.com:/home/ubuntu/wso2am-3.1.0/repository/conf/
+
+######
+scp -i ssh/apim310.key active-passive/analytics1/worker/deployment.yaml ubuntu@analytics1.apim.com:/home/ubuntu/wso2am-analytics-3.1.0/conf/worker
+scp -i ssh/apim310.key active-passive/analytics2/worker/deployment.yaml ubuntu@analytics2.apim.com:/home/ubuntu/wso2am-analytics-3.1.0/conf/worker
+
+scp -i ssh/apim310.key active-passive/apim1/deployment.toml ubuntu@apim1.apim.com:/home/ubuntu/wso2am-3.1.0/repository/conf/
+scp -i ssh/apim310.key active-passive/apim2/deployment.toml ubuntu@apim2.apim.com:/home/ubuntu/wso2am-3.1.0/repository/conf/
+scp -i ssh/apim310.key active-passive/apim2/deployment.toml ubuntu@apim3.apim.com:/home/ubuntu/wso2am-3.1.0/repository/conf/
+scp -i ssh/apim310.key active-passive/apim2/deployment.toml ubuntu@apim4.apim.com:/home/ubuntu/wso2am-3.1.0/repository/conf/
+scp -i ssh/apim310.key active-passive/apim2/deployment.toml ubuntu@apim5.apim.com:/home/ubuntu/wso2am-3.1.0/repository/conf/
+
+scp -i ssh/apim310.key log4j2.properties  ubuntu@apim1.apim.com:/home/ubuntu/wso2am-3.1.0/repository/conf/
+scp -i ssh/apim310.key log4j2.properties  ubuntu@apim2.apim.com:/home/ubuntu/wso2am-3.1.0/repository/conf/
+scp -i ssh/apim310.key log4j2.properties  ubuntu@apim3.apim.com:/home/ubuntu/wso2am-3.1.0/repository/conf/
+scp -i ssh/apim310.key log4j2.properties  ubuntu@apim4.apim.com:/home/ubuntu/wso2am-3.1.0/repository/conf/
+scp -i ssh/apim310.key log4j2.properties  ubuntu@apim5.apim.com:/home/ubuntu/wso2am-3.1.0/repository/conf/
+
+scp -i ssh/apim310.key catalina-server.xml.j2 ubuntu@apim1.apim.com:wso2am-3.1.0/repository/resources/conf/templates/repository/conf/tomcat/
+scp -i ssh/apim310.key catalina-server.xml.j2 ubuntu@apim2.apim.com:wso2am-3.1.0/repository/resources/conf/templates/repository/conf/tomcat/
+scp -i ssh/apim310.key catalina-server.xml.j2 ubuntu@apim3.apim.com:wso2am-3.1.0/repository/resources/conf/templates/repository/conf/tomcat/
+scp -i ssh/apim310.key catalina-server.xml.j2 ubuntu@apim4.apim.com:wso2am-3.1.0/repository/resources/conf/templates/repository/conf/tomcat/
+scp -i ssh/apim310.key catalina-server.xml.j2 ubuntu@apim5.apim.com:wso2am-3.1.0/repository/resources/conf/templates/repository/conf/tomcat/
+
+scp -i ssh/apim310.key ubuntu@db.apim.com:/home/ubuntu/.ssh/id_rsa.pub ./
+scp -i ssh/apim310.key id_rsa.pub ubuntu@192.168.112.3:/home/ubuntu/.ssh/
+scp -i ssh/apim310.key ubuntu@analytics1.apim.com:/home/ubuntu/dump/dump.zip ./
+
+scp -i ssh/apim310.key ubuntu@client1.apim.com:metrix/apim3_gc.log ./
+
+./jstack-profiler -p 1515 -o dump
