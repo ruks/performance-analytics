@@ -1,6 +1,6 @@
 # Performance testing on Analytics 3.1.0
 
-##Setting up servers
+## Setting up servers
 
 ### Following instances are used for the performance testing
 
